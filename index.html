@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -88,6 +89,28 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:
 .e-btn:active{opacity:.78}
 .e-gold{background:#F5C518;color:#0D1B3E;box-shadow:0 6px 20px rgba(245,197,24,0.28)}
 .e-out{background:transparent;color:rgba(255,255,255,0.45);border:1.5px solid rgba(255,255,255,0.18);margin-top:8px}
+
+/* AYARLAR */
+#ayarlar{background:#0D1B3E;justify-content:space-between}
+.ay-header{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.ay-back{background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.6);font-size:22px;padding:4px 8px 4px 0;line-height:1}
+.ay-back:active{opacity:.6}
+.ay-title{font-size:28px;font-weight:900;color:#fff;letter-spacing:6px}
+.ay-bar{width:36px;height:3px;background:#F5C518;border-radius:2px;margin:0 0 0 42px}
+.ay-sub{font-family:"Caveat",cursive;font-size:24px;font-weight:600;color:rgba(255,255,255,0.65);text-align:center;margin-bottom:4px}
+.ay-list{display:flex;flex-direction:column;gap:16px;flex:1;justify-content:center}
+.ay-btn{width:100%;border:none;border-radius:22px;padding:0;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);cursor:pointer;display:flex;align-items:center;gap:18px;padding:20px 22px;transition:opacity .15s}
+.ay-btn:active{opacity:.65;transform:scale(.98)}
+.ay-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ay-icon-1{background:linear-gradient(145deg,#F7CC30,#E8B800)}
+.ay-icon-2{background:linear-gradient(145deg,#4E8AFF,#2D6AE0)}
+.ay-icon-3{background:linear-gradient(145deg,#22C55E,#16A34A)}
+.ay-text{text-align:left}
+.ay-btn-title{font-family:"Caveat",cursive;font-size:22px;font-weight:700;color:#fff;line-height:1.1;display:block}
+.ay-btn-sub{font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:.5px;margin-top:3px;display:block}
+.ay-arrow{margin-left:auto;color:rgba(255,255,255,0.25);font-size:18px;flex-shrink:0}
+.ay-footer{text-align:center}
+.ay-ver{font-family:"Caveat",cursive;font-size:18px;color:rgba(255,255,255,0.2)}
 </style>
 </head>
 <body>
@@ -141,7 +164,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:
       </svg>
       Ünlüler Tabu
     </button>
-    <button class="mbtn out"><span class="mi">⚙️</span>Ayarlar</button>
+    <button class="mbtn out" id="btn-ayarlar"><span class="mi">⚙️</span>Ayarlar</button>
   </div>
   <button class="tk-btn"><span>👥</span> TAKIM OLUŞTUR</button>
 </div>
@@ -190,26 +213,71 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:
 // Bu mobil tarayıcılarda çok daha güvenilir çalışır
 
 var cards = [
-  {m:'TABU',       f:['OYUN','KART','KELİME','YASAK','ARKADAŞ']},
-  {m:'FUTBOL',     f:['TOP','SAHA','KALE','GOL','TAKIM']},
-  {m:'KÖPEK',      f:['HAYVAN','EV','HAVLAMAK','TASMA','PATI']},
-  {m:'UÇAK',       f:['KANAT','HAVA','YOLCU','PİLOT','UÇMAK']},
-  {m:'ELMA',       f:['MEYVE','KIRMIZI','AĞAÇ','SU','YEMEK']},
-  {m:'KİTAP',      f:['OKUMAK','SAYFA','YAZAR','HİKAYE','KÜTÜPHANE']},
-  {m:'DENİZ',      f:['SU','DALGA','KUMSAL','BALIK','MAVİ']},
-  {m:'TELEFON',    f:['ARAMAK','MESAJ','EKRAN','TUŞLAR','SES']},
-  {m:'MÜZİK',      f:['ŞARKI','NOTA','ENSTRÜMAN','RİTİM','KULAK']},
-  {m:'OKUL',       f:['DERS','ÖĞRENCİ','ÖĞRETMEN','SINIF','KİTAP']},
-  {m:'ARABA',      f:['TEKERLEK','MOTOR','SÜRÜCÜ','YOL','KAPI']},
-  {m:'PASTA',      f:['TATLI','KREM','DOĞUM GÜNÜ','UN','ŞEKER']},
-  {m:'GÜNEŞ',      f:['IŞIK','SICAK','SARI','GÖKYÜZÜ','GÜN']},
-  {m:'BİLGİSAYAR', f:['EKRAN','KLAVYE','İNTERNET','PROGRAM','FARE']},
-  {m:'ÇİKOLATA',   f:['TATLI','KAKAO','BAR','ŞEKER','KAHVE']},
-  {m:'EV',         f:['KONUT','BİNA','OTOBUS','KAPI','BAHÇE']},
-  {m:'SU',         f:['İÇMEK','DENİZ','YÜZMEK','BARDAK','AKAN']},
-  {m:'CAM',        f:['PENCERE','KIRMAK','BAKMAK','ŞEFFAF','KIRIK']},
-  {m:'EKMEK',      f:['UN','FIRIN','YİYECEK','BUĞDAY','DİLİM']},
-  {m:'PARA',       f:['MADENI','BANKNOT','ÖDEMEK','BANKA','ZENGİN']},
+  {m:'KARGO', f:['PAKET','GÖNDERI','KURYE','TESLIMAT','ADRES']},
+  {m:'SINAV', f:['OKUL','ÖĞRENCI','NOT','SORU','KAĞIT']},
+  {m:'ÇİKOLATA', f:['TATLI','KAKAO','ŞEKER','SÜT','YEMEK']},
+  {m:'SAKSI', f:['ÇIÇEK','TOPRAK','BITKI','SU','BALKON']},
+  {m:'TEZ', f:['ÜNIVERSITE','MEZUNIYET','YAZI','ARAŞTIRMA','KONU']},
+  {m:'PAMUK', f:['TARLA','BEYAZ','YUMUŞAK','İPLIK','KUMAŞ']},
+  {m:'İNCİR', f:['MEYVE','AĞAÇ','KURU','TATLI','ÇEKIRDEK']},
+  {m:'YAPAY ZEKA', f:['BILGISAYAR','ROBOT','TEKNOLOJI','KOD','YAZILIM']},
+  {m:'PODCAST', f:['DINLEMEK','SES','RADYO','BÖLÜM','YAYIN']},
+  {m:'ŞÜPHELİ', f:['POLIS','CINAYET','SUÇLU','KANIT','KATIL']},
+  {m:'ŞEMSİYE', f:['YAĞMUR','ISLANMAK','HAVA','KIŞ','AÇMAK']},
+  {m:'GÖZLÜK', f:['GÖRMEK','GÖZ','ÇERÇEVE','CAM','GÜNEŞ']},
+  {m:'CÜZDAN', f:['PARA','KART','DERI','ÇANTA','CEP']},
+  {m:'ANAHTAR', f:['KAPI','KILIT','EV','AÇMAK','ÇILINGIR']},
+  {m:'SAAT', f:['ZAMAN','KOL','DUVAR','AKREP','YELKOVAN']},
+  {m:'LOJİSTİK', f:['TAŞIMA','DAĞITIM','DEPO','TEDARIK','ZINCIR']},
+  {m:'E-TİCARET', f:['İNTERNET','SATIŞ','ALIŞVERIŞ','SEPET','SIPARIŞ']},
+  {m:'DEPO', f:['STOK','MAL','SAKLAMAK','ALAN','RAF']},
+  {m:'KRİTER', f:['ŞART','ÖZELLIK','SEÇIM','KARAR','DEĞERLENDIRME']},
+  {m:'ALTERNATİF', f:['SEÇENEK','DIĞER','YERINE','FARKLI','ÇÖZÜM']},
+  {m:'AKADEMİK', f:['ÜNIVERSITE','MAKALE','BILIMSEL','OKUL','EĞITIM']},
+  {m:'DANIŞMAN', f:['HOCA','REHBER','YARDIM','FIKIR','GÖREVLI']},
+  {m:'MEMUR', f:['DEVLET','ATAMA','SINAV','ÇALIŞAN','MAAŞ']},
+  {m:'MÜLAKAT', f:['GÖRÜŞME','SORU','İŞ','SINAV','YÜZYÜZE']},
+  {m:'KULAKLIK', f:['MÜZIK','DINLEMEK','SES','KULAK','TAKMAK']},
+  {m:'ÇEVİRİ', f:['DIL','ANLAM','KELIME','YABANCI','SÖZLÜK']},
+  {m:'DEKORASYON', f:['EV','SÜSLEMEK','TASARIM','GÜZELLEŞTIRMEK','EŞYA']},
+  {m:'BİSİKLET', f:['TEKERLEK','PEDAL','SÜRMEK','İKI','SELE']},
+  {m:'SİNEMA', f:['FILM','PERDE','MISIR','İZLEMEK','BILET']},
+  {m:'BİLGİSAYAR', f:['KLAVYE','EKRAN','FARE','İNTERNET','KASA']},
+  {m:'KAHVE', f:['KAFEIN','FINCAN','UYANIK','TELVE','SICAK']},
+  {m:'ŞARJ', f:['TELEFON','PIL','BATARYA','DOLDURMAK','KABLO']},
+  {m:'TRAFİK', f:['ARABA','YOL','SIKIŞIK','KIRMIZI IŞIK','KORNA']},
+  {m:'TATİL', f:['YAZ','DENIZ','DINLENMEK','OTEL','YOLCULUK']},
+  {m:'SÖZLÜK', f:['KELIME','ANLAM','KITAP','BAKMAK','DIL']},
+  {m:'FIRIN', f:['EKMEK','PIŞIRMEK','SICAK','HAMUR','MUTFAK']},
+  {m:'HASTANE', f:['DOKTOR','HEMŞIRE','HASTA','İLAÇ','TEDAVI']},
+  {m:'MÜZİK', f:['NOTA','ŞARKI','DINLEMEK','SES','RITIM']},
+  {m:'GÜNEŞ', f:['SICAK','YAZ','IŞIK','GÜNDÜZ','YILDIZ']},
+  {m:'UÇAK', f:['HAVA','UÇMAK','HAVALIMANI','KANAT','PILOT']},
+  {m:'FOTOĞRAF', f:['ÇEKMEK','KAMERA','POZ','ALBÜM','RESIM']},
+  {m:'YASTIK', f:['UYKU','YATAK','BAŞ','YUMUŞAK','KILIF']},
+  {m:'OTOBÜS', f:['YOLCU','DURAK','ŞOFÖR','BILET','TOPLU TAŞIMA']},
+  {m:'SAÇ', f:['TARAK','BERBER','KESTIRMEK','TEL','ŞAMPUAN']},
+  {m:'DENİZ', f:['SU','TUZLU','YÜZMEK','DALGA','MAVI']},
+  {m:'KİTAP', f:['OKUMAK','SAYFA','YAZAR','KAPAK','KÜTÜPHANE']},
+  {m:'HARİTA', f:['YOL','YÖN','BULMAK','ÇIZIM','COĞRAFYA']},
+  {m:'TELEFON', f:['ARAMAK','KONUŞMAK','MESAJ','İLETIŞIM','MOBIL']},
+  {m:'KALEM', f:['YAZMAK','KAĞIT','UÇ','KURŞUN','TÜKENMEZ']},
+  {m:'AYAKKABI', f:['GIYINMEK','AYAK','YÜRÜMEK','BAĞCIK','TOPUK']},
+  {m:'ÇANTA', f:['EŞYA','TAŞIMAK','SIRT','KOL','FERMUAR']},
+  {m:'TELEVİZYON', f:['İZLEMEK','EKRAN','KANAL','KUMANDA','DIZI']},
+  {m:'KEDİ', f:['MIYAV','HAYVAN','PATI','TÜY','EVCIL']},
+  {m:'KÖPEK', f:['HAVLAMAK','KEMIK','SADIK','HAYVAN','ISIRMAK']},
+  {m:'AĞAÇ', f:['ORMAN','YAPRAK','DAL','YEŞIL','KÖK']},
+  {m:'GÖKYÜZÜ', f:['MAVI','BULUT','KUŞ','UÇMAK','HAVA']},
+  {m:'YAĞMUR', f:['SU','BULUT','ISLANMAK','DAMLA','ŞEMSIYE']},
+  {m:'KAR', f:['BEYAZ','KIŞ','SOĞUK','YAĞMAK','TOP']},
+  {m:'RÜZGAR', f:['ESMEK','HAVA','FIRTINA','UÇURMAK','SERIN']},
+  {m:'KAPI', f:['AÇMAK','KAPATMAK','KOL','KILIT','GIRIŞ']},
+  {m:'PENCERE', f:['CAM','BAKMAK','DIŞARI','PERDE','AÇMAK']},
+  {m:'MASA', f:['YEMEK','SANDALYE','AHŞAP','OTURMAK','ÇALIŞMAK']},
+  {m:'TABAK', f:['YEMEK','PORSELEN','MUTFAK','KIRMAK','BULAŞIK']},
+  {m:'BARDAK', f:['SU','İÇMEK','CAM','ÇAY','KUPA']},
+  {m:'YÜZÜK', f:['PARMAĞA TAKMAK','ALTIN','EVLILIK','TEKTAŞ','TAKI']}
 ];
 
 var sA=0, sB=0, turn='A', tLeft=60, tInt=null, ci=0, deck=[], mode='', turns=0;
@@ -301,7 +369,55 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   document.getElementById('btn-yeni').addEventListener('click',   function(){ startGame(mode); });
   document.getElementById('btn-menu2').addEventListener('click',  function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
+  document.getElementById('btn-ayarlar').addEventListener('click',  function(){ goTo('ayarlar'); });
+  document.getElementById('btn-ay-back').addEventListener('click',  function(){ goTo('menu'); });
+  document.getElementById('btn-ses').addEventListener('click',      function(){ alert('Ses ve Titreşim Ayarları yakında!'); });
+  document.getElementById('btn-gorunum').addEventListener('click',  function(){ alert('Görünüm ve Erişilebilirlik yakında!'); });
+  document.getElementById('btn-yardim').addEventListener('click',   function(){ alert('Yardım ve Destek yakında!'); });
 });
 </script>
+
+<div class="screen" id="ayarlar">
+  <div>
+    <div class="ay-header">
+      <button class="ay-back" id="btn-ay-back">◀</button>
+      <div class="ay-title">AYARLAR</div>
+    </div>
+    <div class="ay-bar"></div>
+  </div>
+
+  <div class="ay-sub">ne yapmak istersiniz?</div>
+
+  <div class="ay-list">
+    <button class="ay-btn" id="btn-ses">
+      <div class="ay-icon ay-icon-1">🔊</div>
+      <div class="ay-text">
+        <span class="ay-btn-title">Ses ve Titreşim Ayarları</span>
+        <span class="ay-btn-sub">SES • TİTREŞİM • BİLDİRİM</span>
+      </div>
+      <span class="ay-arrow">›</span>
+    </button>
+    <button class="ay-btn" id="btn-gorunum">
+      <div class="ay-icon ay-icon-2">🎨</div>
+      <div class="ay-text">
+        <span class="ay-btn-title">Görünüm ve Erişilebilirlik</span>
+        <span class="ay-btn-sub">TEMA • FONT • RENK</span>
+      </div>
+      <span class="ay-arrow">›</span>
+    </button>
+    <button class="ay-btn" id="btn-yardim">
+      <div class="ay-icon ay-icon-3">💬</div>
+      <div class="ay-text">
+        <span class="ay-btn-title">Yardım ve Destek</span>
+        <span class="ay-btn-sub">SSS • İLETİŞİM • KURALLAR</span>
+      </div>
+      <span class="ay-arrow">›</span>
+    </button>
+  </div>
+
+  <div class="ay-footer">
+    <div class="ay-ver">tabu oyunu · v1.0</div>
+  </div>
+</div>
 </body>
 </html>
