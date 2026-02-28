@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Tabu Oyunu</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Caveat:wght@600;700&display=swap");
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;padding:52px 20px 32px;overflow:hidden}
+.screen.active{display:flex}
+@supports(padding-top:env(safe-area-inset-top)){
+  .screen{padding-top:max(52px,env(safe-area-inset-top));padding-bottom:max(32px,env(safe-area-inset-bottom))}
+}
+@media(min-width:500px){
+  body{display:flex;align-items:center;justify-content:center;background:#94A3B8}
+  .screen{position:absolute;width:390px;height:844px;border-radius:52px;overflow:hidden;box-shadow:0 0 0 10px #1C2340,0 0 0 12px #2E3A5E,0 40px 80px rgba(0,0,0,0.5)}
+}
+
+/* SPLASH */
+#splash{background:#0D1B3E;align-items:center;justify-content:center}
+.sp-inner{display:flex;flex-direction:column;align-items:center;width:100%;padding:0 8px}
+.sp-title{font-size:48px;font-weight:900;color:#fff;letter-spacing:10px;text-align:center;line-height:1}
+.sp-sub{font-size:16px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:14px;text-align:center;margin-top:6px}
+.sp-bar{width:48px;height:4px;background:#F5C518;border-radius:2px;margin:18px auto 16px}
+.sp-tag{font-family:"Caveat",cursive;font-size:26px;font-weight:600;color:rgba(255,255,255,0.6);text-align:center;margin-bottom:48px}
+.sp-btn{width:100%;padding:20px;border:none;border-radius:22px;background:linear-gradient(145deg,#F7CC30,#E8B800);color:#0D1B3E;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:900;font-size:16px;letter-spacing:3px;cursor:pointer;box-shadow:0 8px 28px rgba(245,197,24,0.35)}
+.sp-btn:active{opacity:.82;transform:scale(.98)}
+.sp-ver{font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:2px;margin-top:24px}
+.sp-clap{margin-bottom:28px}
+
+/* MENU */
+#menu{background:#0D1B3E;justify-content:space-between}
+.mn-title{text-align:center}
+.mn-title h1{font-size:28px;font-weight:900;color:#fff;letter-spacing:6px}
+.mn-bar{width:36px;height:3px;background:#F5C518;border-radius:2px;margin:8px auto 0}
+.mn-sub{font-family:"Caveat",cursive;font-size:26px;font-weight:600;color:rgba(255,255,255,0.7);text-align:center}
+.mn-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;align-content:center}
+.mbtn{border:none;border-radius:20px;cursor:pointer;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;aspect-ratio:1;position:relative;overflow:hidden}
+.mbtn:active{opacity:.78;transform:scale(.96)}
+.mbtn.gold{background:linear-gradient(145deg,#F7CC30,#E8B800);color:#0D1B3E;box-shadow:0 6px 20px rgba(245,197,24,0.28)}
+.mbtn.out{background:transparent;border:2px solid rgba(255,255,255,0.35);color:#fff}
+.mi{font-size:26px;line-height:1}
+.tk-btn{width:100%;border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:18px;background:rgba(255,255,255,0.08);color:#fff;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:15px;letter-spacing:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.tk-btn:active{opacity:.75}
+
+/* GAME */
+#game{background:#F0F4FA}
+.sc-bar{background:#E4E9F2;border-radius:16px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:14px;position:relative;flex-shrink:0}
+.bk-btn{position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:#8A93A8;padding:8px;line-height:1}
+.sc-team{font-size:11px;font-weight:700;color:#1C2340;letter-spacing:.5px;text-align:center;flex:1}
+.sc-team b{display:block;font-size:24px;font-weight:900;color:#3B5BDB;line-height:1.1}
+.sc-div{font-size:20px;font-weight:700;color:#C8D0E0;padding:0 8px}
+.f1{flex:1;min-height:8px;max-height:20px}
+.gc{background:#fff;border-radius:26px;padding:20px 16px 18px;box-shadow:0 8px 32px rgba(28,35,64,0.12);flex-shrink:0}
+.gc-head{text-align:center;padding-bottom:14px;border-bottom:1.5px solid #EEF1F8;margin-bottom:14px}
+.gc-word{font-size:24px;font-weight:900;color:#1C2340;letter-spacing:3px;margin-bottom:3px}
+.gc-sub{font-size:9px;font-weight:600;letter-spacing:3px;color:#A0A8BE}
+.gc-list{display:flex;flex-direction:column;gap:8px}
+.gc-item{background:#F5F7FC;border-radius:12px;padding:11px 16px;font-size:14px;font-weight:700;color:#1A1F3A;text-align:center}
+.tmr{background:#1C2340;border-radius:18px;padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;box-shadow:0 6px 20px rgba(28,35,64,0.25);flex-shrink:0;transition:background .4s}
+.tmr.warn{background:#C0392B}
+.tmr-n{font-size:28px;font-weight:900;color:#fff;letter-spacing:1px;min-width:70px;font-variant-numeric:tabular-nums}
+.act{display:flex;gap:10px;margin-top:14px;flex-shrink:0}
+.ab{flex:1;border:none;border-radius:16px;padding:16px 4px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:12px;letter-spacing:.5px;color:#fff;cursor:pointer;min-height:54px}
+.ab:active{opacity:.78;transform:scale(.96)}
+.ab-t{background:#E53E3E;box-shadow:0 4px 14px rgba(229,62,62,0.3)}
+.ab-p{background:#64748B;box-shadow:0 4px 14px rgba(100,116,139,0.25)}
+.ab-d{background:#22C55E;box-shadow:0 4px 14px rgba(34,197,94,0.3)}
+
+/* END */
+#end{background:#0D1B3E;align-items:center;justify-content:center;gap:20px}
+.e-trophy{font-size:72px;line-height:1}
+.e-lbl{font-size:13px;font-weight:700;letter-spacing:4px;color:#F5C518;text-transform:uppercase}
+.e-win{font-size:26px;font-weight:900;color:#fff;text-align:center;line-height:1.3}
+.e-scores{display:flex;gap:14px;width:100%}
+.esc{flex:1;background:rgba(255,255,255,0.07);border-radius:20px;padding:18px 10px;text-align:center;border:1px solid rgba(255,255,255,0.1)}
+.esc.win{background:rgba(245,197,24,0.14);border-color:rgba(245,197,24,0.35)}
+.esc-n{font-size:10px;font-weight:700;letter-spacing:2px;color:#8A9BB8;margin-bottom:6px}
+.esc-s{font-size:42px;font-weight:900;color:#fff;line-height:1}
+.esc.win .esc-s{color:#F5C518}
+.esc-l{font-size:10px;color:#6B7A99;margin-top:3px}
+.e-btn{width:100%;border:none;border-radius:18px;padding:18px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:15px;cursor:pointer;letter-spacing:1px}
+.e-btn:active{opacity:.78}
+.e-gold{background:#F5C518;color:#0D1B3E;box-shadow:0 6px 20px rgba(245,197,24,0.28)}
+.e-out{background:transparent;color:rgba(255,255,255,0.45);border:1.5px solid rgba(255,255,255,0.18);margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="splash">
+  <div class="sp-inner">
+    <div class="sp-clap">
+      <svg viewBox="0 0 160 160" width="148" height="148" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="90" r="62" fill="rgba(245,197,24,0.06)"/>
+        <rect x="18" y="58" width="124" height="80" rx="10" fill="#1C2340"/>
+        <circle cx="30" cy="76" r="6" fill="#0D1B3E"/><circle cx="30" cy="98" r="6" fill="#0D1B3E"/><circle cx="30" cy="120" r="6" fill="#0D1B3E"/>
+        <circle cx="130" cy="76" r="6" fill="#0D1B3E"/><circle cx="130" cy="98" r="6" fill="#0D1B3E"/><circle cx="130" cy="120" r="6" fill="#0D1B3E"/>
+        <polygon points="63,74 63,118 111,96" fill="#F5C518" opacity="0.93"/>
+        <rect x="18" y="34" width="124" height="27" rx="8" fill="#FFFFFF" opacity="0.92"/>
+        <rect x="38" y="34" width="12" height="27" fill="#1C2340"/><rect x="66" y="34" width="12" height="27" fill="#1C2340"/>
+        <rect x="94" y="34" width="12" height="27" fill="#1C2340"/><rect x="122" y="34" width="12" height="27" fill="#1C2340"/>
+        <rect x="18" y="26" width="124" height="11" rx="5" fill="#F5C518"/>
+        <rect x="18" y="34" width="124" height="4" fill="rgba(0,0,0,0.1)"/>
+        <polygon points="80,14 82.5,21 90,21 84,25.5 86.5,32.5 80,28 73.5,32.5 76,25.5 70,21 77.5,21" fill="#F5C518"/>
+      </svg>
+    </div>
+    <div class="sp-title">TABU</div>
+    <div class="sp-sub">OYUNU</div>
+    <div class="sp-bar"></div>
+    <div class="sp-tag">kelime savaşına hazır mısınız?</div>
+    <button class="sp-btn" id="btn-splash">OYNAMAYA BAŞLA</button>
+    <div class="sp-ver">v1.0 · tabu oyunu</div>
+  </div>
+</div>
+
+<div class="screen" id="menu">
+  <div class="mn-title"><h1>TABU OYUNU</h1><div class="mn-bar"></div></div>
+  <div class="mn-sub">kelime savaşına hazır mısınız?</div>
+  <div class="mn-grid">
+    <button class="mbtn gold" id="btn-klasik"><span class="mi">🎯</span>Klasik Tabu</button>
+    <button class="mbtn gold" id="btn-film">
+      <svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="22" width="44" height="28" rx="4" fill="#1C2340"/>
+        <rect x="10" y="14" width="44" height="10" rx="3" fill="#FFF" opacity=".95"/>
+        <rect x="19" y="14" width="5" height="10" fill="#1C2340"/><rect x="31" y="14" width="5" height="10" fill="#1C2340"/><rect x="43" y="14" width="5" height="10" fill="#1C2340"/>
+        <rect x="10" y="11" width="44" height="5" rx="2" fill="#F5C518"/>
+        <polygon points="26,30 26,42 43,36" fill="#F5C518"/>
+        <circle cx="14" cy="29" r="2.5" fill="#0D1B3E"/><circle cx="14" cy="37" r="2.5" fill="#0D1B3E"/><circle cx="14" cy="45" r="2.5" fill="#0D1B3E"/>
+        <circle cx="50" cy="29" r="2.5" fill="#0D1B3E"/><circle cx="50" cy="37" r="2.5" fill="#0D1B3E"/><circle cx="50" cy="45" r="2.5" fill="#0D1B3E"/>
+      </svg>
+      Film Tabu
+    </button>
+    <button class="mbtn gold" id="btn-unlu">
+      <svg width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#0D1B3E"/>
+      </svg>
+      Ünlüler Tabu
+    </button>
+    <button class="mbtn out"><span class="mi">⚙️</span>Ayarlar</button>
+  </div>
+  <button class="tk-btn"><span>👥</span> TAKIM OLUŞTUR</button>
+</div>
+
+<div class="screen" id="game">
+  <div class="sc-bar">
+    <button class="bk-btn" id="btn-back">◀</button>
+    <div class="sc-team">A TAKIMI<b id="sa">0</b></div>
+    <div class="sc-div">—</div>
+    <div class="sc-team">B TAKIMI<b id="sb">0</b></div>
+  </div>
+  <div class="f1"></div>
+  <div class="gc">
+    <div class="gc-head">
+      <div class="gc-word" id="main-word">TABU</div>
+      <div class="gc-sub">YASAKLI KELİMELER</div>
+    </div>
+    <div class="gc-list" id="word-list">
+      <div class="gc-item">OYUN</div><div class="gc-item">KART</div>
+      <div class="gc-item">KELİME</div><div class="gc-item">YASAK</div><div class="gc-item">ARKADAŞ</div>
+    </div>
+  </div>
+  <div class="tmr" id="tmr"><span style="font-size:20px">⏳</span><span class="tmr-n" id="tmr-n">60 sn</span></div>
+  <div class="f1"></div>
+  <div class="act">
+    <button class="ab ab-t" id="btn-tabu">TABU</button>
+    <button class="ab ab-p" id="btn-pas">PAS</button>
+    <button class="ab ab-d" id="btn-devam">DEVAM ET</button>
+  </div>
+</div>
+
+<div class="screen" id="end">
+  <div class="e-trophy">🏆</div>
+  <div class="e-lbl">Oyun Bitti!</div>
+  <div class="e-win" id="e-win">A Takımı Kazandı!</div>
+  <div class="e-scores">
+    <div class="esc" id="eca"><div class="esc-n">A TAKIMI</div><div class="esc-s" id="ea">0</div><div class="esc-l">puan</div></div>
+    <div class="esc" id="ecb"><div class="esc-n">B TAKIMI</div><div class="esc-s" id="eb">0</div><div class="esc-l">puan</div></div>
+  </div>
+  <button class="e-btn e-gold" id="btn-yeni">🔄 Yeni Oyun</button>
+  <button class="e-btn e-out"  id="btn-menu2">Ana Menü</button>
+</div>
+
+<script>
+// Tüm buton event'lerini addEventListener ile bağla - onclick yerine
+// Bu mobil tarayıcılarda çok daha güvenilir çalışır
+
+var cards = [
+  {m:'TABU',       f:['OYUN','KART','KELİME','YASAK','ARKADAŞ']},
+  {m:'FUTBOL',     f:['TOP','SAHA','KALE','GOL','TAKIM']},
+  {m:'KÖPEK',      f:['HAYVAN','EV','HAVLAMAK','TASMA','PATI']},
+  {m:'UÇAK',       f:['KANAT','HAVA','YOLCU','PİLOT','UÇMAK']},
+  {m:'ELMA',       f:['MEYVE','KIRMIZI','AĞAÇ','SU','YEMEK']},
+  {m:'KİTAP',      f:['OKUMAK','SAYFA','YAZAR','HİKAYE','KÜTÜPHANE']},
+  {m:'DENİZ',      f:['SU','DALGA','KUMSAL','BALIK','MAVİ']},
+  {m:'TELEFON',    f:['ARAMAK','MESAJ','EKRAN','TUŞLAR','SES']},
+  {m:'MÜZİK',      f:['ŞARKI','NOTA','ENSTRÜMAN','RİTİM','KULAK']},
+  {m:'OKUL',       f:['DERS','ÖĞRENCİ','ÖĞRETMEN','SINIF','KİTAP']},
+  {m:'ARABA',      f:['TEKERLEK','MOTOR','SÜRÜCÜ','YOL','KAPI']},
+  {m:'PASTA',      f:['TATLI','KREM','DOĞUM GÜNÜ','UN','ŞEKER']},
+  {m:'GÜNEŞ',      f:['IŞIK','SICAK','SARI','GÖKYÜZÜ','GÜN']},
+  {m:'BİLGİSAYAR', f:['EKRAN','KLAVYE','İNTERNET','PROGRAM','FARE']},
+  {m:'ÇİKOLATA',   f:['TATLI','KAKAO','BAR','ŞEKER','KAHVE']},
+  {m:'EV',         f:['KONUT','BİNA','OTOBUS','KAPI','BAHÇE']},
+  {m:'SU',         f:['İÇMEK','DENİZ','YÜZMEK','BARDAK','AKAN']},
+  {m:'CAM',        f:['PENCERE','KIRMAK','BAKMAK','ŞEFFAF','KIRIK']},
+  {m:'EKMEK',      f:['UN','FIRIN','YİYECEK','BUĞDAY','DİLİM']},
+  {m:'PARA',       f:['MADENI','BANKNOT','ÖDEMEK','BANKA','ZENGİN']},
+];
+
+var sA=0, sB=0, turn='A', tLeft=60, tInt=null, ci=0, deck=[], mode='', turns=0;
+
+function goTo(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i=0; i<screens.length; i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame(m) {
+  mode = m; sA=0; sB=0; turn='A'; turns=0;
+  deck = cards.slice().sort(function(){return Math.random()-0.5;});
+  ci = 0;
+  document.getElementById('sa').textContent = '0';
+  document.getElementById('sb').textContent = '0';
+  loadCard();
+  startTimer();
+  goTo('game');
+}
+
+function loadCard() {
+  if (ci >= deck.length) {
+    deck = cards.slice().sort(function(){return Math.random()-0.5;});
+    ci = 0;
+  }
+  var c = deck[ci];
+  document.getElementById('main-word').textContent = c.m;
+  var wl = document.getElementById('word-list');
+  wl.innerHTML = '';
+  for (var i=0; i<c.f.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'gc-item';
+    d.textContent = c.f[i];
+    wl.appendChild(d);
+  }
+}
+
+function startTimer() {
+  if (tInt) clearInterval(tInt);
+  tLeft = 60;
+  var tmr = document.getElementById('tmr');
+  tmr.classList.remove('warn');
+  document.getElementById('tmr-n').textContent = '60 sn';
+  tInt = setInterval(function(){
+    tLeft--;
+    document.getElementById('tmr-n').textContent = tLeft + ' sn';
+    if (tLeft <= 10) document.getElementById('tmr').classList.add('warn');
+    if (tLeft <= 0) { clearInterval(tInt); tInt=null; endTurn(); }
+  }, 1000);
+}
+
+function endTurn() {
+  turn = (turn==='A') ? 'B' : 'A';
+  turns++;
+  if (turns >= 6) { showEnd(); return; }
+  setTimeout(function(){ loadCard(); startTimer(); }, 500);
+}
+
+function showEnd() {
+  document.getElementById('ea').textContent = sA;
+  document.getElementById('eb').textContent = sB;
+  var wa = document.getElementById('eca'), wb = document.getElementById('ecb');
+  wa.classList.remove('win'); wb.classList.remove('win');
+  var wt = document.getElementById('e-win');
+  if (sA > sB)      { wt.textContent='🎉 A Takımı Kazandı!'; wa.classList.add('win'); }
+  else if (sB > sA) { wt.textContent='🎉 B Takımı Kazandı!'; wb.classList.add('win'); }
+  else              { wt.textContent='🤝 Berabere!'; }
+  goTo('end');
+}
+
+// Tüm butonları addEventListener ile bağla
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('btn-splash').addEventListener('click', function(){ goTo('menu'); });
+  document.getElementById('btn-klasik').addEventListener('click', function(){ startGame('Klasik Tabu'); });
+  document.getElementById('btn-film').addEventListener('click',   function(){ startGame('Film Tabu'); });
+  document.getElementById('btn-unlu').addEventListener('click',   function(){ startGame('Ünlüler Tabu'); });
+  document.getElementById('btn-back').addEventListener('click',   function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
+  document.getElementById('btn-tabu').addEventListener('click',   function(){
+    if (turn==='A') sA=Math.max(0,sA-1); else sB=Math.max(0,sB-1);
+    document.getElementById('sa').textContent=sA; document.getElementById('sb').textContent=sB;
+    ci++; loadCard();
+  });
+  document.getElementById('btn-pas').addEventListener('click',    function(){ ci++; loadCard(); });
+  document.getElementById('btn-devam').addEventListener('click',  function(){
+    if (turn==='A') sA++; else sB++;
+    document.getElementById('sa').textContent=sA; document.getElementById('sb').textContent=sB;
+    ci++; loadCard();
+  });
+  document.getElementById('btn-yeni').addEventListener('click',   function(){ startGame(mode); });
+  document.getElementById('btn-menu2').addEventListener('click',  function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
+});
+</script>
+</body>
+</html>
