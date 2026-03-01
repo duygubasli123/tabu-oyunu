@@ -114,7 +114,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:
 .tmr.warn .tmr-n{color:#FCA5A5}
 
 /* KART */
-.gc-wrap{flex:1;display:flex;align-items:center;min-height:0}
+.gc-wrap{flex:1;display:flex;align-items:center;min-height:0;overflow:hidden}
 .gc{
   width:100%;
   background:rgba(255,255,255,0.97);
@@ -406,25 +406,18 @@ body.font-buyuk .gc-sub{font-size:11px !important}
 }
 /* TABU: sert yatay titreşim */
 @keyframes shakeTabu {
-  0%,100%{ transform:translateX(0); }
-  12%    { transform:translateX(-10px); }
-  25%    { transform:translateX(10px); }
-  37%    { transform:translateX(-8px); }
-  50%    { transform:translateX(8px); }
-  62%    { transform:translateX(-4px); }
-  75%    { transform:translateX(4px); }
-  88%    { transform:translateX(-2px); }
+  0%   { transform:translateX(0) rotate(0deg); }
+  10%  { transform:translateX(-12px) rotate(-1.5deg); }
+  25%  { transform:translateX(12px) rotate(1.5deg); }
+  40%  { transform:translateX(-10px) rotate(-1deg); }
+  55%  { transform:translateX(10px) rotate(1deg); }
+  70%  { transform:translateX(-5px) rotate(-0.5deg); }
+  85%  { transform:translateX(5px) rotate(0.5deg); }
+  100% { transform:translateX(0) rotate(0deg); }
 }
-/* DOĞRU: hafif yukarı sıçra */
-@keyframes cardCorrect {
-  0%  { transform:scale(1); }
-  30% { transform:scale(1.03) translateY(-4px); }
-  60% { transform:scale(.99) translateY(0); }
-  100%{ transform:scale(1); }
-}
-.gc.anim-pas    { animation: cardSlideOut .28s cubic-bezier(.4,0,1,1) forwards; }
-.gc.anim-new    { animation: cardSlideIn .22s cubic-bezier(.22,1,.36,1) forwards; }
-.gc.anim-tabu   { animation: shakeTabu .22s cubic-bezier(.36,.07,.19,.97); box-shadow:0 0 0 3px rgba(239,68,68,0.6),0 20px 60px rgba(0,0,0,0.4)!important; }
+.gc.anim-tabu { animation:shakeTabu .35s cubic-bezier(.36,.07,.19,.97); box-shadow:0 0 0 4px rgba(239,68,68,0.7),0 20px 60px rgba(239,68,68,0.25)!important; background:rgba(255,235,235,0.97)!important; }
+.gc.anim-pas  { animation:cardSlideOut .17s cubic-bezier(.4,0,1,1) forwards; }
+.gc.anim-new  { animation:cardSlideIn  .16s cubic-bezier(.22,1,.36,1) forwards; }
 .gc.anim-correct{ animation: cardCorrect .2s cubic-bezier(.22,1,.36,1); }
 
 /* KONFETİ */
@@ -744,6 +737,27 @@ function updScore() {
   if(sb) sb.textContent = sB;
 }
 
+function updTeamNames() {
+  var la = document.getElementById('name-a-label');
+  var lb = document.getElementById('name-b-label');
+  if(la) la.textContent = teamAName.toUpperCase();
+  if(lb) lb.textContent = teamBName.toUpperCase();
+  // Emojileri göster
+  var ea = document.getElementById('game-emoji-a');
+  var eb = document.getElementById('game-emoji-b');
+  if(ea && teamAEmojiSrc) { ea.src = teamAEmojiSrc; ea.style.display = 'block'; }
+  if(eb && teamBEmojiSrc) { eb.src = teamBEmojiSrc; eb.style.display = 'block'; }
+}
+
+function updTurnUI() {
+  var ca = document.getElementById('team-a-card');
+  var cb = document.getElementById('team-b-card');
+  var tl = document.getElementById('turn-label');
+  if(ca) ca.classList.toggle('active-team', turn === 'A');
+  if(cb) cb.classList.toggle('active-team', turn === 'B');
+  if(tl) tl.textContent = (turn === 'A' ? teamAName : teamBName) + ' anlatıyor';
+}
+
 function loadCard() {
   if (ci >= deck.length) {
     deck = cards.slice().sort(function(){return Math.random()-0.5;});
@@ -781,7 +795,18 @@ function endTurn() {
   window['pas_A'] = 0; window['pas_B'] = 0;
   var pb = document.getElementById('btn-pas');
   pb.style.opacity = '1'; pb.disabled = false;
-  setTimeout(function(){ updatePasCount(); updTurnUI(); }, 50);
+  // updTurnUI global scope'da değil, DOMContentLoaded içinde — direkt çağır
+  var ca = document.getElementById('team-a-card');
+  var cb = document.getElementById('team-b-card');
+  var tl = document.getElementById('turn-label');
+  if(ca) ca.classList.toggle('active-team', turn === 'A');
+  if(cb) cb.classList.toggle('active-team', turn === 'B');
+  if(tl) tl.textContent = (turn === 'A' ? teamAName : teamBName) + ' anlatıyor';
+  if(document.getElementById('pas-badge')) {
+    var kalan = gameSettings.pasHakki - (window['pas_' + turn] || 0);
+    document.getElementById('pas-badge').textContent = kalan;
+    document.getElementById('pas-badge').style.background = '#A78BFA';
+  }
   if (turns >= 6) { showEnd(); return; }
   setTimeout(function(){ loadCard(); startTimer(); }, 500);
 }
@@ -801,29 +826,115 @@ function showEnd() {
 // Tüm butonları addEventListener ile bağla
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Konfeti — ekranın tepesinden dökülür, kartı kapatmaz
+  // ── EMOJİ + KONFETİ YAĞMURU ──────────────────────────────────────────
   function showConfetti() {
-    var wrap = document.createElement('div');
-    wrap.className = 'confetti-wrap';
-    wrap.style.cssText = 'position:fixed;top:0;left:0;right:0;height:45%;pointer-events:none;z-index:999;overflow:hidden;';
     var colors = ['#F5C518','#22C55E','#60A5FA','#FB7185','#A78BFA','#FCD34D','#34D399','#F97316'];
-    var screenW = window.innerWidth;
-    for (var i = 0; i < 32; i++) {
-      var dot = document.createElement('div');
-      dot.className = 'dot';
-      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
-      dot.style.left = (Math.random() * screenW) + 'px';
-      dot.style.top  = (-10 + Math.random() * 20) + 'px';
-      dot.style.animationDelay = (Math.random() * 0.3) + 's';
-      var size = 5 + Math.random() * 9;
-      dot.style.width = size + 'px';
-      dot.style.height = size + 'px';
-      // Bazıları kare olsun
-      if (Math.random() > 0.5) dot.style.borderRadius = '2px';
-      wrap.appendChild(dot);
+    var W = window.innerWidth;
+    var H = window.innerHeight;
+    var particles = [];
+
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    canvas.width = W; canvas.height = H;
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+
+    // Aktif takımın emoji src'sini al
+    var emojiSrc = turn === 'A' ? teamAEmojiSrc : teamBEmojiSrc;
+    var emojiImg = null;
+    if(emojiSrc) {
+      emojiImg = new Image();
+      emojiImg.src = emojiSrc;
     }
-    document.body.appendChild(wrap);
-    setTimeout(function(){ wrap.remove(); }, 900);
+
+    // Konfeti parçacıkları (30 adet)
+    for(var i = 0; i < 30; i++) {
+      particles.push({
+        type: 'conf',
+        x: Math.random() * W,
+        y: -8 - Math.random() * 30,
+        vx: (Math.random() - 0.5) * 3,
+        vy: 2 + Math.random() * 3.5,
+        size: 5 + Math.random() * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 0.2,
+        alpha: 1,
+        gravity: 0.1 + Math.random() * 0.08,
+        wobbleT: Math.random() * Math.PI * 2,
+      });
+    }
+
+    // Emoji parçacıkları (10 adet — daha az ama çarpıcı)
+    for(var j = 0; j < 10; j++) {
+      particles.push({
+        type: 'emoji',
+        x: W * 0.15 + Math.random() * W * 0.7,
+        y: -20 - Math.random() * 60,
+        vx: (Math.random() - 0.5) * 2.5,
+        vy: 1.8 + Math.random() * 2.5,
+        size: 28 + Math.random() * 18,
+        rot: (Math.random() - 0.5) * 0.4,
+        rotV: (Math.random() - 0.5) * 0.06,
+        alpha: 1,
+        gravity: 0.09 + Math.random() * 0.06,
+        wobbleT: Math.random() * Math.PI * 2,
+        delay: j * 60, // ms — art arda gelsin
+      });
+    }
+
+    var startTime = performance.now();
+    var duration = 1600;
+
+    function draw(now) {
+      var elapsed = now - startTime;
+      ctx.clearRect(0, 0, W, H);
+
+      for(var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+
+        // Emoji delay
+        if(p.type === 'emoji' && p.delay && elapsed < p.delay) continue;
+
+        p.vy += p.gravity;
+        p.wobbleT += 0.05;
+        p.vx += Math.sin(p.wobbleT) * 0.06;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.rotV;
+        p.alpha = Math.max(0, 1 - (elapsed / duration) * 1.15);
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+
+        if(p.type === 'conf') {
+          ctx.fillStyle = p.color;
+          if(p.shape === 'circle') {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size/2, 0, Math.PI*2);
+            ctx.fill();
+          } else {
+            ctx.fillRect(-p.size/2, -p.size*0.3, p.size, p.size*0.6);
+          }
+        } else if(p.type === 'emoji' && emojiImg && emojiImg.complete) {
+          var s = p.size;
+          ctx.shadowColor = 'rgba(0,0,0,0.25)';
+          ctx.shadowBlur = 8;
+          ctx.drawImage(emojiImg, -s/2, -s/2, s, s);
+        }
+        ctx.restore();
+      }
+
+      if(elapsed < duration) {
+        requestAnimationFrame(draw);
+      } else {
+        canvas.remove();
+      }
+    }
+    requestAnimationFrame(draw);
   }
 
   // Kart animasyonu — AAA
@@ -841,12 +952,14 @@ document.addEventListener('DOMContentLoaded', function() {
       card.classList.add('anim-pas');
       setTimeout(function(){
         card.classList.remove('anim-pas');
+        card.style.opacity = '0';
         cb();
         setTimeout(function(){
+          card.style.opacity = '1';
           card.classList.add('anim-new');
-          setTimeout(function(){ card.classList.remove('anim-new'); }, 220);
+          setTimeout(function(){ card.classList.remove('anim-new'); }, 160);
         }, 20);
-      }, 280);
+      }, 170);
     } else if (type === 'correct') {
       card.classList.add('anim-correct');
       setTimeout(function(){ card.classList.remove('anim-correct'); cb(); }, 200);
@@ -896,10 +1009,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-film').addEventListener('click',   function(){ playClick(); pendingMode='Film Tabu'; goTo('takim'); });
   document.getElementById('btn-unlu').addEventListener('click',   function(){ playClick(); pendingMode='Ünlüler Tabu'; goTo('takim'); });
   document.getElementById('btn-back').addEventListener('click',   function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
-  document.getElementById('btn-tabu').addEventListener('click',   function(){
-    if (turn==='A') sA=Math.max(0,sA-gameSettings.tabuCeza); else sB=Math.max(0,sB-gameSettings.tabuCeza);
-    document.getElementById('sa').textContent=sA; document.getElementById('sb').textContent=sB;
-    ci++; loadCard();
+  document.getElementById('btn-tabu').addEventListener('click', function(){
+    animateCard('tabu', function(){
+      if (turn==='A') sA=Math.max(0,sA-gameSettings.tabuCeza); else sB=Math.max(0,sB-gameSettings.tabuCeza);
+      updScore(); ci++; loadCard();
+    });
   });
   document.getElementById('btn-pas').addEventListener('click', function(){
     if (gameSettings.pasHakki === 0) return;
