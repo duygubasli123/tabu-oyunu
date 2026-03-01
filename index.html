@@ -51,27 +51,175 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0D1B3E;font-family:
 
 /* GAME */
 #game{background:#F0F4FA}
-.sc-bar{background:#E4E9F2;border-radius:16px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:14px;position:relative;flex-shrink:0}
-.bk-btn{position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:#8A93A8;padding:8px;line-height:1}
-.sc-team{font-size:11px;font-weight:700;color:#1C2340;letter-spacing:.5px;text-align:center;flex:1}
-.sc-team b{display:block;font-size:24px;font-weight:900;color:#3B5BDB;line-height:1.1}
-.sc-div{font-size:20px;font-weight:700;color:#C8D0E0;padding:0 8px}
-.f1{flex:1;min-height:8px;max-height:20px}
-.gc{background:#fff;border-radius:26px;padding:20px 16px 18px;box-shadow:0 8px 32px rgba(28,35,64,0.12);flex-shrink:0}
-.gc-head{text-align:center;padding-bottom:14px;border-bottom:1.5px solid #EEF1F8;margin-bottom:14px}
-.gc-word{font-size:24px;font-weight:900;color:#1C2340;letter-spacing:3px;margin-bottom:3px}
-.gc-sub{font-size:9px;font-weight:600;letter-spacing:3px;color:#A0A8BE}
-.gc-list{display:flex;flex-direction:column;gap:8px}
-.gc-item{background:#F5F7FC;border-radius:12px;padding:11px 16px;font-size:14px;font-weight:700;color:#1A1F3A;text-align:center}
-.tmr{background:#1C2340;border-radius:18px;padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;box-shadow:0 6px 20px rgba(28,35,64,0.25);flex-shrink:0;transition:background .4s}
-.tmr.warn{background:#C0392B}
-.tmr-n{font-size:28px;font-weight:900;color:#fff;letter-spacing:1px;min-width:70px;font-variant-numeric:tabular-nums}
-.act{display:flex;gap:10px;margin-top:14px;flex-shrink:0}
-.ab{flex:1;border:none;border-radius:16px;padding:16px 4px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:800;font-size:12px;letter-spacing:.5px;color:#fff;cursor:pointer;min-height:54px}
-.ab:active{opacity:.78;transform:scale(.96)}
-.ab-t{background:#E53E3E;box-shadow:0 4px 14px rgba(229,62,62,0.3)}
-.ab-p{background:#64748B;box-shadow:0 4px 14px rgba(100,116,139,0.25)}
-.ab-d{background:#22C55E;box-shadow:0 4px 14px rgba(34,197,94,0.3)}
+/* ═══ GAME SCREEN — AAA PREMIUM ══════════════════════════════ */
+#game{background:linear-gradient(160deg,#0F172A 0%,#1E293B 100%)}
+
+/* HEADER BAR */
+.sc-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;margin-bottom:12px;flex-shrink:0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.bk-btn{
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.7);
+  font-size:14px;padding:8px 10px;line-height:1;flex-shrink:0
+}
+.bk-btn:active{opacity:.6;transform:scale(.94)}
+.sc-teams{display:flex;align-items:center;gap:6px;flex:1;justify-content:center}
+.sc-team{
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(255,255,255,0.06);border-radius:14px;
+  padding:6px 14px;min-width:80px;
+  border:1px solid rgba(255,255,255,0.08);
+}
+.sc-team.active-team{
+  background:rgba(245,197,24,0.12);
+  border-color:rgba(245,197,24,0.35);
+}
+.sc-team-name{font-size:9px;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:1.5px;text-transform:uppercase}
+.sc-team-score{font-size:26px;font-weight:900;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.sc-team.active-team .sc-team-score{color:#F5C518}
+.sc-div{font-size:14px;color:rgba(255,255,255,0.2);padding:0 4px}
+
+/* TIMER */
+.tmr-wrap{flex-shrink:0;margin-bottom:10px}
+.tmr{
+  border-radius:18px;padding:12px 20px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:none;
+  transition:background .5s,border-color .5s;
+  flex-shrink:0;
+}
+.tmr.warn{
+  background:rgba(239,68,68,0.2)!important;
+  border-color:rgba(239,68,68,0.5)!important;
+  animation:timerPulse .6s ease-in-out infinite alternate;
+}
+@keyframes timerPulse{
+  from{box-shadow:0 0 0 0 rgba(239,68,68,0)}
+  to  {box-shadow:0 0 0 8px rgba(239,68,68,0.15)}
+}
+.tmr-n{
+  font-size:30px;font-weight:900;color:#fff;
+  letter-spacing:1px;min-width:72px;text-align:center;
+  font-variant-numeric:tabular-nums;
+  transition:color .3s;
+}
+.tmr.warn .tmr-n{color:#FCA5A5}
+
+/* KART */
+.gc-wrap{flex:1;display:flex;align-items:center;min-height:0}
+.gc{
+  width:100%;
+  background:rgba(255,255,255,0.97);
+  border-radius:28px;
+  padding:22px 18px 20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4),0 2px 0 rgba(255,255,255,0.1) inset;
+  border:1px solid rgba(255,255,255,0.15);
+  will-change:transform,opacity;
+}
+.gc-head{
+  text-align:center;padding-bottom:14px;
+  border-bottom:2px solid #F1F5F9;margin-bottom:14px;
+}
+.gc-word{
+  font-size:26px;font-weight:900;color:#0F172A;
+  letter-spacing:3px;margin-bottom:4px;
+  transition:font-size .15s;
+}
+.gc-mode-badge{
+  display:inline-block;background:#EEF2FF;color:#6366F1;
+  font-size:8px;font-weight:800;letter-spacing:2px;
+  padding:3px 10px;border-radius:20px;text-transform:uppercase;
+}
+.gc-list{display:flex;flex-direction:column;gap:7px}
+.gc-item{
+  background:#F8FAFC;border-radius:12px;
+  padding:10px 16px;font-size:13px;font-weight:700;
+  color:#1E293B;text-align:center;
+  border:1px solid #E2E8F0;
+  position:relative;overflow:hidden;
+}
+.gc-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:linear-gradient(180deg,#EF4444,#F97316);
+  border-radius:3px 0 0 3px;
+}
+
+/* BUTONLAR */
+.act{display:flex;gap:8px;flex-shrink:0;margin-top:10px}
+.ab{
+  flex:1;border:none;border-radius:20px;
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+  font-weight:800;font-size:11px;letter-spacing:.8px;
+  color:#fff;cursor:pointer;
+  min-height:62px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  position:relative;overflow:hidden;
+  transition:transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s ease;
+  will-change:transform;
+  -webkit-tap-highlight-color:transparent;
+}
+.ab::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 100%);
+  pointer-events:none;
+}
+.ab:active{transform:scale(.93)!important;box-shadow:none!important}
+
+/* TABU — kırmızı */
+.ab-t{
+  background:linear-gradient(160deg,#EF4444,#B91C1C);
+  box-shadow:0 6px 20px rgba(239,68,68,0.4),0 1px 0 rgba(255,255,255,0.15) inset;
+  flex:1.1;
+}
+.ab-t-icon{font-size:18px;line-height:1}
+
+/* PAS — slate */
+.ab-p{
+  background:linear-gradient(160deg,#475569,#1E293B);
+  box-shadow:0 6px 20px rgba(30,41,59,0.5),0 1px 0 rgba(255,255,255,0.1) inset;
+  flex:0.9;
+}
+.ab-p-icon{font-size:16px;line-height:1}
+
+/* DOĞRU — yeşil - en büyük */
+.ab-d{
+  background:linear-gradient(160deg,#22C55E,#15803D);
+  box-shadow:0 6px 24px rgba(34,197,94,0.45),0 1px 0 rgba(255,255,255,0.2) inset;
+  flex:1.2;
+}
+.ab-d-icon{font-size:20px;line-height:1}
+
+/* Pas sayaç badge */
+.pas-count{
+  position:absolute;top:6px;right:6px;
+  background:rgba(255,255,255,0.2);color:#fff;
+  font-size:10px;font-weight:900;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1;border:1.5px solid rgba(255,255,255,0.3);
+}
+
+/* Aktif takım göstergesi */
+.turn-indicator{
+  text-align:center;flex-shrink:0;margin-bottom:6px;
+}
+.turn-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,197,24,0.12);
+  border:1px solid rgba(245,197,24,0.3);
+  border-radius:20px;padding:5px 14px;
+}
+.turn-dot{width:7px;height:7px;border-radius:50%;background:#F5C518;animation:turnBlink .8s ease-in-out infinite alternate}
+@keyframes turnBlink{from{opacity:.4}to{opacity:1}}
+.turn-text{font-family:"Caveat",cursive;font-size:15px;font-weight:700;color:#F5C518}
 
 /* END */
 #end{background:#0D1B3E;align-items:center;justify-content:center;gap:20px}
@@ -200,6 +348,132 @@ body.font-buyuk .gc-sub{font-size:11px !important}
 @media(min-width:500px){.tk-start-wrap{position:absolute;width:390px;left:50%;transform:translateX(-50%)}}
 .tk-start-btn{width:100%;border:none;border-radius:22px;padding:20px;background:linear-gradient(145deg,#F7CC30,#E8B800);color:#0D1B3E;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:900;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:0 8px 28px rgba(245,197,24,0.3)}
 .tk-start-btn:active{opacity:.82;transform:scale(.98)}
+
+/* OYUN AYARLARI */
+#oyun-ayar{background:linear-gradient(160deg,#0A1628 0%,#111D3E 40%,#0D1B3E 100%);justify-content:space-between;position:relative;overflow:hidden}
+#oyun-ayar::before{content:'';position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(245,197,24,0.07) 0%,transparent 70%);pointer-events:none}
+#oyun-ayar::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(59,91,219,0.08) 0%,transparent 70%);pointer-events:none}
+.oa-header{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.oa-back{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;color:rgba(255,255,255,0.8);font-size:16px;padding:8px 12px;line-height:1}
+.oa-back:active{opacity:.6}
+.oa-screen-title{font-size:22px;font-weight:900;color:#fff;letter-spacing:5px}
+.oa-title-bar{width:36px;height:3px;background:#F5C518;border-radius:2px;margin:6px 0 0 54px}
+.oa-sub{font-family:"Caveat",cursive;font-size:24px;font-weight:700;color:rgba(255,255,255,0.45);text-align:center;margin:4px 0}
+.oa-cards{display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center}
+
+.oa-card{background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.09);border-radius:24px;padding:18px 18px 16px;position:relative;overflow:hidden;transition:border-color .2s}
+.oa-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.03),transparent);pointer-events:none}
+
+.oa-card-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.oa-card-icon{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.oa-icon-sure{background:linear-gradient(145deg,#60A5FA,#2563EB);box-shadow:0 6px 18px rgba(37,99,235,0.35)}
+.oa-icon-pas{background:linear-gradient(145deg,#A78BFA,#7C3AED);box-shadow:0 6px 18px rgba(124,58,237,0.35)}
+.oa-icon-tabu{background:linear-gradient(145deg,#FB7185,#E11D48);box-shadow:0 6px 18px rgba(225,29,72,0.35)}
+.oa-card-info{flex:1}
+.oa-card-title{font-family:"Caveat",cursive;font-size:22px;font-weight:700;color:#fff;line-height:1.1}
+.oa-card-desc{font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1.2px;margin-top:3px;text-transform:uppercase}
+.oa-card-val{font-size:28px;font-weight:900;line-height:1;min-width:64px;text-align:right}
+.oa-val-sure{color:#60A5FA}
+.oa-val-pas{color:#A78BFA}
+.oa-val-tabu{color:#FB7185}
+
+/* Slider */
+.oa-slider-wrap{position:relative}
+.oa-slider{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:5px;outline:none;cursor:pointer;margin-bottom:10px}
+.oa-slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.5)}
+.oa-slider-sure::-webkit-slider-thumb{background:#60A5FA}
+.oa-slider-pas::-webkit-slider-thumb{background:#A78BFA}
+.oa-slider-tabu::-webkit-slider-thumb{background:#FB7185}
+
+.oa-ticks{display:flex;justify-content:space-between}
+.oa-tick{font-size:9px;font-weight:700;color:rgba(255,255,255,0.22);letter-spacing:.5px;transition:color .2s,transform .2s;transform-origin:center bottom}
+.oa-tick.active{color:#F5C518;transform:scale(1.15)}
+
+/* Başla butonu */
+.oa-start-btn{width:100%;border:none;border-radius:22px;padding:20px;background:linear-gradient(145deg,#F7CC30,#E8B800);color:#0D1B3E;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-weight:900;font-size:15px;letter-spacing:2px;cursor:pointer;box-shadow:0 8px 28px rgba(245,197,24,0.3)}
+.oa-start-btn:active{opacity:.82;transform:scale(.98)}
+
+/* ═══ KART ANİMASYONLARI — AAA ════════════════════════════ */
+/* PAS: sola süzül */
+@keyframes cardSlideOut {
+  0%   { transform:translateX(0) rotate(0deg) scale(1); opacity:1; }
+  100% { transform:translateX(-110%) rotate(-8deg) scale(.9); opacity:0; }
+}
+/* YENİ KART: sağdan gir */
+@keyframes cardSlideIn {
+  0%   { transform:translateX(60px) scale(.96); opacity:0; }
+  100% { transform:translateX(0) scale(1); opacity:1; }
+}
+/* TABU: sert yatay titreşim */
+@keyframes shakeTabu {
+  0%,100%{ transform:translateX(0); }
+  12%    { transform:translateX(-10px); }
+  25%    { transform:translateX(10px); }
+  37%    { transform:translateX(-8px); }
+  50%    { transform:translateX(8px); }
+  62%    { transform:translateX(-4px); }
+  75%    { transform:translateX(4px); }
+  88%    { transform:translateX(-2px); }
+}
+/* DOĞRU: hafif yukarı sıçra */
+@keyframes cardCorrect {
+  0%  { transform:scale(1); }
+  30% { transform:scale(1.03) translateY(-4px); }
+  60% { transform:scale(.99) translateY(0); }
+  100%{ transform:scale(1); }
+}
+.gc.anim-pas    { animation: cardSlideOut .28s cubic-bezier(.4,0,1,1) forwards; }
+.gc.anim-new    { animation: cardSlideIn .22s cubic-bezier(.22,1,.36,1) forwards; }
+.gc.anim-tabu   { animation: shakeTabu .22s cubic-bezier(.36,.07,.19,.97); box-shadow:0 0 0 3px rgba(239,68,68,0.6),0 20px 60px rgba(0,0,0,0.4)!important; }
+.gc.anim-correct{ animation: cardCorrect .2s cubic-bezier(.22,1,.36,1); }
+
+/* KONFETİ */
+.confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  animation: dotFall 0.65s cubic-bezier(.4,0,1,1) forwards;
+}
+@keyframes dotFall {
+  0%   { transform:translateY(0) scale(1) rotate(0deg); opacity:1; }
+  70%  { opacity:.8; }
+  100% { transform:translateY(280px) scale(0.15) rotate(220deg); opacity:0; }
+}
+
+/* PAS SAYACI */
+.pas-count{
+  position:absolute;top:6px;right:6px;
+  background:rgba(255,255,255,0.2);color:#fff;
+  font-size:10px;font-weight:900;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1;border:1.5px solid rgba(255,255,255,0.3);
+}
+.ab{position:relative;}
+
+/* KONFETİ */
+.confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+.dot {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  animation: dotFall 0.7s ease-in forwards;
+}
+@keyframes dotFall {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(180px) scale(0.3); opacity: 0; }
+}
+
+/* PAS SAYACI */
+.pas-count { 
+  position: absolute; top: -8px; right: -8px;
+  background: #A78BFA; color: #fff;
+  font-size: 11px; font-weight: 900;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.ab { position: relative; }
 </style>
 </head>
 <body>
@@ -259,30 +533,78 @@ body.font-buyuk .gc-sub{font-size:11px !important}
 </div>
 
 <div class="screen" id="game">
+
+  <!-- HEADER -->
   <div class="sc-bar">
     <button class="bk-btn" id="btn-back">◀</button>
-    <div class="sc-team">A TAKIMI<b id="sa">0</b></div>
-    <div class="sc-div">—</div>
-    <div class="sc-team">B TAKIMI<b id="sb">0</b></div>
-  </div>
-  <div class="f1"></div>
-  <div class="gc">
-    <div class="gc-head">
-      <div class="gc-word" id="main-word">TABU</div>
-      <div class="gc-sub">YASAKLI KELİMELER</div>
+    <div class="sc-teams">
+      <div class="sc-team active-team" id="team-a-card">
+        <img id="game-emoji-a" src="" style="width:28px;height:28px;object-fit:contain;display:none;margin-bottom:2px;">
+        <div class="sc-team-name" id="name-a-label">A TAKIMI</div>
+        <div class="sc-team-score" id="sa">0</div>
+      </div>
+      <div class="sc-div">vs</div>
+      <div class="sc-team" id="team-b-card">
+        <img id="game-emoji-b" src="" style="width:28px;height:28px;object-fit:contain;display:none;margin-bottom:2px;">
+        <div class="sc-team-name" id="name-b-label">B TAKIMI</div>
+        <div class="sc-team-score" id="sb">0</div>
+      </div>
     </div>
-    <div class="gc-list" id="word-list">
-      <div class="gc-item">OYUN</div><div class="gc-item">KART</div>
-      <div class="gc-item">KELİME</div><div class="gc-item">YASAK</div><div class="gc-item">ARKADAŞ</div>
+  </div>
+
+  <!-- AKTİF TAKIM -->
+  <div class="turn-indicator">
+    <div class="turn-badge">
+      <div class="turn-dot"></div>
+      <div class="turn-text" id="turn-label">A Takımı anlatıyor</div>
     </div>
   </div>
-  <div class="tmr" id="tmr"><span style="font-size:20px">⏳</span><span class="tmr-n" id="tmr-n">60 sn</span></div>
-  <div class="f1"></div>
+
+  <!-- KART -->
+  <div class="gc-wrap">
+    <div class="gc" id="gc-card">
+      <div class="gc-head">
+        <div class="gc-word" id="main-word">TABU</div>
+        <div class="gc-mode-badge" id="mode-badge">KLASİK TABU</div>
+      </div>
+      <div class="gc-list" id="word-list">
+        <div class="gc-item">OYUN</div>
+        <div class="gc-item">KART</div>
+        <div class="gc-item">KELİME</div>
+        <div class="gc-item">YASAK</div>
+        <div class="gc-item">ARKADAŞ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="tmr-wrap">
+    <div class="tmr" id="tmr">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+        <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+        <path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="tmr-n" id="tmr-n">60 sn</span>
+    </div>
+  </div>
+
+  <!-- BUTONLAR -->
   <div class="act">
-    <button class="ab ab-t" id="btn-tabu">TABU</button>
-    <button class="ab ab-p" id="btn-pas">PAS</button>
-    <button class="ab ab-d" id="btn-devam">DEVAM ET</button>
+    <button class="ab ab-t" id="btn-tabu">
+      <span class="ab-t-icon">✕</span>
+      TABU
+    </button>
+    <button class="ab ab-p" id="btn-pas">
+      <span class="ab-p-icon">→</span>
+      PAS
+      <span class="pas-count" id="pas-badge">3</span>
+    </button>
+    <button class="ab ab-d" id="btn-devam">
+      <span class="ab-d-icon">✓</span>
+      DOĞRU
+    </button>
   </div>
+
 </div>
 
 <div class="screen" id="end">
@@ -386,6 +708,7 @@ var cards = [
 ];
 
 var sA=0, sB=0, turn='A', tLeft=60, tInt=null, ci=0, deck=[], mode='', turns=0;
+var gameSettings = { sure: 60, pasHakki: 3, tabuCeza: 1 };
 var teamAName='A Takımı', teamBName='B Takımı', teamAEmoji='', teamBEmoji='', teamAEmojiSrc='', teamBEmojiSrc='', pendingMode='Klasik Tabu';
 
 function goTo(id) {
@@ -396,6 +719,8 @@ function goTo(id) {
 
 function startGame(m) {
   mode = m; sA=0; sB=0; turn='A'; turns=0;
+  window['pas_A'] = 0; window['pas_B'] = 0;
+  tLeft = gameSettings.sure;
   deck = cards.slice().sort(function(){return Math.random()-0.5;});
   ci = 0;
   document.getElementById('sa').textContent = '0';
@@ -403,6 +728,20 @@ function startGame(m) {
   loadCard();
   startTimer();
   goTo('game');
+  setTimeout(function(){
+    var pb = document.getElementById('btn-pas');
+    pb.style.opacity = '1'; pb.disabled = false;
+    updatePasCount();
+    updTurnUI();
+    updTeamNames();
+  }, 100);
+}
+
+function updScore() {
+  var sa = document.getElementById('sa');
+  var sb = document.getElementById('sb');
+  if(sa) sa.textContent = sA;
+  if(sb) sb.textContent = sB;
 }
 
 function loadCard() {
@@ -424,7 +763,7 @@ function loadCard() {
 
 function startTimer() {
   if (tInt) clearInterval(tInt);
-  tLeft = 60;
+  tLeft = gameSettings.sure;
   var tmr = document.getElementById('tmr');
   tmr.classList.remove('warn');
   document.getElementById('tmr-n').textContent = '60 sn';
@@ -439,6 +778,10 @@ function startTimer() {
 function endTurn() {
   turn = (turn==='A') ? 'B' : 'A';
   turns++;
+  window['pas_A'] = 0; window['pas_B'] = 0;
+  var pb = document.getElementById('btn-pas');
+  pb.style.opacity = '1'; pb.disabled = false;
+  setTimeout(function(){ updatePasCount(); updTurnUI(); }, 50);
   if (turns >= 6) { showEnd(); return; }
   setTimeout(function(){ loadCard(); startTimer(); }, 500);
 }
@@ -457,6 +800,69 @@ function showEnd() {
 
 // Tüm butonları addEventListener ile bağla
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Konfeti — ekranın tepesinden dökülür, kartı kapatmaz
+  function showConfetti() {
+    var wrap = document.createElement('div');
+    wrap.className = 'confetti-wrap';
+    wrap.style.cssText = 'position:fixed;top:0;left:0;right:0;height:45%;pointer-events:none;z-index:999;overflow:hidden;';
+    var colors = ['#F5C518','#22C55E','#60A5FA','#FB7185','#A78BFA','#FCD34D','#34D399','#F97316'];
+    var screenW = window.innerWidth;
+    for (var i = 0; i < 32; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+      dot.style.left = (Math.random() * screenW) + 'px';
+      dot.style.top  = (-10 + Math.random() * 20) + 'px';
+      dot.style.animationDelay = (Math.random() * 0.3) + 's';
+      var size = 5 + Math.random() * 9;
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      // Bazıları kare olsun
+      if (Math.random() > 0.5) dot.style.borderRadius = '2px';
+      wrap.appendChild(dot);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(function(){ wrap.remove(); }, 900);
+  }
+
+  // Kart animasyonu — AAA
+  function animateCard(type, cb) {
+    var card = document.getElementById('gc-card');
+    if (!card) { cb(); return; }
+    if (type === 'tabu') {
+      card.classList.add('anim-tabu');
+      setTimeout(function(){
+        card.classList.remove('anim-tabu');
+        card.style.boxShadow = '';
+        setTimeout(cb, 80);
+      }, 220);
+    } else if (type === 'pas') {
+      card.classList.add('anim-pas');
+      setTimeout(function(){
+        card.classList.remove('anim-pas');
+        cb();
+        setTimeout(function(){
+          card.classList.add('anim-new');
+          setTimeout(function(){ card.classList.remove('anim-new'); }, 220);
+        }, 20);
+      }, 280);
+    } else if (type === 'correct') {
+      card.classList.add('anim-correct');
+      setTimeout(function(){ card.classList.remove('anim-correct'); cb(); }, 200);
+    } else {
+      cb();
+    }
+  }
+
+  // Pas sayacını güncelle
+  function updatePasCount() {
+    var kalan = gameSettings.pasHakki - (window['pas_' + turn] || 0);
+    var badge = document.getElementById('pas-badge');
+    if (!badge) return;
+    badge.textContent = kalan;
+    badge.style.background = kalan === 0 ? '#E53E3E' : '#A78BFA';
+  }
     // Ses durumu
   var soundEnabled = true;
 
@@ -491,18 +897,81 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-unlu').addEventListener('click',   function(){ playClick(); pendingMode='Ünlüler Tabu'; goTo('takim'); });
   document.getElementById('btn-back').addEventListener('click',   function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
   document.getElementById('btn-tabu').addEventListener('click',   function(){
-    if (turn==='A') sA=Math.max(0,sA-1); else sB=Math.max(0,sB-1);
+    if (turn==='A') sA=Math.max(0,sA-gameSettings.tabuCeza); else sB=Math.max(0,sB-gameSettings.tabuCeza);
     document.getElementById('sa').textContent=sA; document.getElementById('sb').textContent=sB;
     ci++; loadCard();
   });
-  document.getElementById('btn-pas').addEventListener('click',    function(){ ci++; loadCard(); });
-  document.getElementById('btn-devam').addEventListener('click',  function(){
-    if (turn==='A') sA++; else sB++;
-    document.getElementById('sa').textContent=sA; document.getElementById('sb').textContent=sB;
-    ci++; loadCard();
+  document.getElementById('btn-pas').addEventListener('click', function(){
+    if (gameSettings.pasHakki === 0) return;
+    var pasKey = 'pas_' + turn;
+    window[pasKey] = (window[pasKey] || 0) + 1;
+    if (window[pasKey] > gameSettings.pasHakki) return;
+    if (window[pasKey] >= gameSettings.pasHakki) {
+      document.getElementById('btn-pas').style.opacity = '0.35';
+      document.getElementById('btn-pas').disabled = true;
+    }
+    updatePasCount();
+    animateCard('pas', function(){ ci++; loadCard(); });
+  });
+  document.getElementById('btn-devam').addEventListener('click', function(){
+    showConfetti();
+    animateCard('correct', function(){
+      if (turn==='A') sA++; else sB++;
+      updScore(); ci++; loadCard();
+    });
   });
   document.getElementById('btn-yeni').addEventListener('click',   function(){ startGame(mode); });
   document.getElementById('btn-menu2').addEventListener('click',  function(){ clearInterval(tInt); tInt=null; goTo('menu'); });
+
+  // Oyun ayarları
+  document.getElementById('btn-oa-back').addEventListener('click', function(){ goTo('takim'); });
+
+  function updateSliderBg(slider, min, max, color) {
+    var pct = (slider.value - min) / (max - min) * 100;
+    slider.style.background = 'linear-gradient(to right,' + color + ' ' + pct + '%,rgba(255,255,255,0.12) ' + pct + '%)';
+  }
+
+  // Sayfa açılışında slider renklerini ayarla
+  updateSliderBg(document.getElementById('slider-sure'), 30, 90, '#60A5FA');
+  updateSliderBg(document.getElementById('slider-pas'),  0,  5,  '#A78BFA');
+  updateSliderBg(document.getElementById('slider-tabu'), 1,  3,  '#FB7185');
+
+  // Süre slider
+  document.getElementById('slider-sure').addEventListener('input', function(){
+    var v = parseInt(this.value);
+    gameSettings.sure = v;
+    document.getElementById('sure-val').textContent = v + ' sn';
+    document.querySelectorAll('[id^="tick-sure-"]').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('tick-sure-' + v).classList.add('active');
+    updateSliderBg(this, 30, 90, '#60A5FA');
+  });
+
+  // Pas slider
+  document.getElementById('slider-pas').addEventListener('input', function(){
+    var v = parseInt(this.value);
+    gameSettings.pasHakki = v;
+    document.getElementById('pas-val').textContent = v;
+    document.querySelectorAll('[id^="tick-pas-"]').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('tick-pas-' + v).classList.add('active');
+    updateSliderBg(this, 0, 5, '#A78BFA');
+  });
+
+  // Tabu ceza slider
+  document.getElementById('slider-tabu').addEventListener('input', function(){
+    var v = parseInt(this.value);
+    gameSettings.tabuCeza = v;
+    document.getElementById('tabu-val').textContent = '-' + v + ' puan';
+    document.querySelectorAll('[id^="tick-tabu-"]').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('tick-tabu-' + v).classList.add('active');
+    updateSliderBg(this, 1, 3, '#FB7185');
+  });
+
+  // Oyunu başlat
+  document.getElementById('btn-oa-start').addEventListener('click', function(){
+    playClick();
+    startGame(pendingMode);
+    updTeamNames();
+  });
 
   // Takım oluştur
   document.getElementById('btn-takim-ac').addEventListener('click', function(){ goTo('takim'); });
@@ -547,10 +1016,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Oyuna başla butonu
   document.getElementById('btn-takim-start').addEventListener('click', function(){
+    playClick();
     teamAName = document.getElementById('name-a').value || 'A Takımı';
     teamBName = document.getElementById('name-b').value || 'B Takımı';
-    startGame(pendingMode);
-    updTeamNames();
+    goTo('oyun-ayar');
   });
 
   function setFontSize(size) {
@@ -744,6 +1213,101 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 
   <div class="tk-start-wrap"><button class="tk-start-btn" id="btn-takim-start">OYUNA BAŞLA 🚀</button></div>
+</div>
+
+<div class="screen" id="oyun-ayar">
+  <div>
+    <div class="oa-header">
+      <button class="oa-back" id="btn-oa-back">◀</button>
+      <div class="oa-screen-title">OYUN AYARLARI</div>
+    </div>
+    <div class="oa-title-bar"></div>
+  </div>
+
+  <div class="oa-sub">nasıl oynamak istersiniz?</div>
+
+  <div class="oa-cards">
+
+    <!-- SÜRE -->
+    <div class="oa-card" id="card-sure">
+      <div class="oa-card-top">
+        <div class="oa-card-icon oa-icon-sure">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2"/>
+            <path d="M12 7v5l3 3" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="oa-card-info">
+          <div class="oa-card-title">tur süresi</div>
+          <div class="oa-card-desc">Her takım için süre</div>
+        </div>
+        <div class="oa-card-val oa-val-sure" id="sure-val">60 sn</div>
+      </div>
+      <div class="oa-slider-wrap">
+        <input type="range" class="oa-slider oa-slider-sure" id="slider-sure" min="30" max="90" step="30" value="60">
+        <div class="oa-ticks">
+          <span class="oa-tick" id="tick-sure-30">30 sn</span>
+          <span class="oa-tick active" id="tick-sure-60">60 sn</span>
+          <span class="oa-tick" id="tick-sure-90">90 sn</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAS HAKKI -->
+    <div class="oa-card" id="card-pas">
+      <div class="oa-card-top">
+        <div class="oa-card-icon oa-icon-pas">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M15 7l5 5-5 5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="oa-card-info">
+          <div class="oa-card-title">pas hakkı</div>
+          <div class="oa-card-desc">Geçme hakkı • puan kaybı yok</div>
+        </div>
+        <div class="oa-card-val oa-val-pas" id="pas-val">3</div>
+      </div>
+      <div class="oa-slider-wrap">
+        <input type="range" class="oa-slider oa-slider-pas" id="slider-pas" min="0" max="5" step="1" value="3">
+        <div class="oa-ticks">
+          <span class="oa-tick" id="tick-pas-0">0</span>
+          <span class="oa-tick" id="tick-pas-1">1</span>
+          <span class="oa-tick" id="tick-pas-2">2</span>
+          <span class="oa-tick active" id="tick-pas-3">3</span>
+          <span class="oa-tick" id="tick-pas-4">4</span>
+          <span class="oa-tick" id="tick-pas-5">5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABU CEZA -->
+    <div class="oa-card" id="card-tabu">
+      <div class="oa-card-top">
+        <div class="oa-card-icon oa-icon-tabu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2"/>
+            <path d="M15 9l-6 6M9 9l6 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="oa-card-info">
+          <div class="oa-card-title">tabu cezası</div>
+          <div class="oa-card-desc">Yasak kelimede düşen puan</div>
+        </div>
+        <div class="oa-card-val oa-val-tabu" id="tabu-val">-1 puan</div>
+      </div>
+      <div class="oa-slider-wrap">
+        <input type="range" class="oa-slider oa-slider-tabu" id="slider-tabu" min="1" max="3" step="1" value="1">
+        <div class="oa-ticks">
+          <span class="oa-tick active" id="tick-tabu-1">-1</span>
+          <span class="oa-tick" id="tick-tabu-2">-2</span>
+          <span class="oa-tick" id="tick-tabu-3">-3</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="oa-start-btn" id="btn-oa-start">OYUNU BAŞLAT 🎮</button>
 </div>
 </body>
 </html>
